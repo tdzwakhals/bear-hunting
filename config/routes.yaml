@@ -3,3 +3,9 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+security_domain:
+    resource: 'routes/domains/security.yaml'
+
+bear_domain:
+    resource: 'routes/domains/bears.yaml'
