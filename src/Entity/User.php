@@ -11,8 +11,10 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
+use OpenApi\Attributes as OA;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -22,12 +24,14 @@ final class User extends GenericEntity implements UserInterface, PasswordAuthent
     #[ORM\Column(length: 180, nullable: false)]
     #[Assert\NotBlank]
     #[Assert\Email]
+    #[Groups('fetch:admin')]
     private string $email;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups('fetch:admin')]
     private array $roles = [];
 
     /**
@@ -37,6 +41,7 @@ final class User extends GenericEntity implements UserInterface, PasswordAuthent
     private ?string $password = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups('fetch:admin')]
     private ?DateTimeInterface $lastLogin = null;
 
     /**
@@ -157,12 +162,23 @@ final class User extends GenericEntity implements UserInterface, PasswordAuthent
         return $this;
     }
 
+    #[Groups('fetch:admin')]
+    #[OA\Property(type: 'integer')]
+    public function getBearsHunted(): int
+    {
+        return $this->getBears()->count();
+    }
+
     public function jsonSerialize(): array
     {
         return [
-            'email' => $this->email,
-            'roles' => $this->roles,
-            'bears_hunted' => $this->getBears()->count()
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+            'roles' => $this->getRoles(),
+            'bears_hunted' => $this->getBearsHunted(),
+            'last_login' => $this->getLastLogin(),
+            'created' => $this->getCreated()->format('d-m-Y H:i:s'),
+            'updated' => $this->getUpdated()->format('d-m-Y H:i:s'),
         ];
     }
 }
