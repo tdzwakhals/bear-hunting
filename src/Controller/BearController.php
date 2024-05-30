@@ -110,7 +110,7 @@ final class BearController extends AbstractController
         return new JsonResponse($bear);
     }
 
-    #[Route('/{id}', name: 'update', requirements: ['id' => '\d+'], methods: ['PUT'])]
+    #[Route('/{id}/update', name: 'update', requirements: ['id' => '\d+'], methods: ['PUT'])]
     #[OA\Put(requestBody: new OA\RequestBody(content: new OA\JsonContent(ref: new Model(type: BearType::class))))]
     #[OA\Response(
         response: 201,
@@ -141,7 +141,7 @@ final class BearController extends AbstractController
         return new JsonResponse("Bear {$bear->getName()} updated successfully", Response::HTTP_CREATED);
     }
 
-    #[Route('/{id}', name: 'delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     #[OA\Response(
         response: 200,
         description: 'Returns confirmation message if bear is deleted'
