@@ -5,7 +5,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7fa183af-0873-4bc5-99a8-4719d35f7ca5" name="Changes" comment="Reset of .idea">
+      <change afterPath="$PROJECT_DIR$/config/packages/lock.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/packages/rate_limiter.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/EventSubscriber/Security/RateLimiterSubscriber.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/lexik_jwt_authentication.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/lexik_jwt_authentication.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/BearController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/BearController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DTO/Request/LocationDTO.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DTO/Request/LocationDTO.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Bear.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Bear.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/GenericEntity.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/GenericEntity.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Form/Request/LocationType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/Request/LocationType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/BearRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/BearRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UserRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Security/UserProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/UserProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/BearService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/BearService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Service/UserService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Service/UserService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +41,15 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {}
+}]]></component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:tdzwakhals/bear-hunting.git&quot;,
+    &quot;accountId&quot;: &quot;f66bfcae-41b9-4a47-8855-ce0f091a83cd&quot;
+  }
+}</component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
@@ -88,11 +119,13 @@
       <path value="$PROJECT_DIR$/vendor/symfony/form" />
       <path value="$PROJECT_DIR$/vendor/psr/cache" />
       <path value="$PROJECT_DIR$/vendor/psr/clock" />
+      <path value="$PROJECT_DIR$/vendor/symfony/lock" />
+      <path value="$PROJECT_DIR$/vendor/symfony/rate-limiter" />
     </include_path>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2gbXUyvw8O3IkWDpUxWeepEPdS8" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -101,13 +134,15 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "feature/throtling",
     "last_opened_file_path": "C:/Users/tomzw/PhpstormProjects/bear-hunting",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "php.override.implement.member.chooser.php.doc": "NONE",
+    "settings.editor.selected.configurable": "fileTemplates",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -127,7 +162,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1715967270829</updated>
-      <workItem from="1715967271633" duration="735000" />
+      <workItem from="1715967271633" duration="1253000" />
+      <workItem from="1716984754288" duration="4165000" />
+      <workItem from="1717054550565" duration="528000" />
     </task>
     <task id="LOCAL-00001" summary="Reset of .idea">
       <option name="closed" value="true" />
@@ -137,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715967324312</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Reset of .idea">
+      <option name="closed" value="true" />
+      <created>1715968470592</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1715968470592</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
