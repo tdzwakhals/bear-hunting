@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\BearRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -12,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: BearRepository::class)]
 final class Bear extends GenericEntity implements JsonSerializable
 {
-    #[ORM\Column(length: 255, unique: true, nullable: false)]
+    #[ORM\Column(length: 255, nullable: false)]
     #[Assert\NotBlank]
     private string $name;
 
@@ -31,6 +33,17 @@ final class Bear extends GenericEntity implements JsonSerializable
     #[ORM\Column(nullable: false)]
     #[Assert\NotBlank]
     private float $longitude;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'bears')]
+    private Collection $hunters;
+
+    public function __construct()
+    {
+        $this->hunters = new ArrayCollection();
+    }
 
     public function getName(): string
     {
@@ -95,6 +108,34 @@ final class Bear extends GenericEntity implements JsonSerializable
             'province' => $this->province,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
+            'hunters' => array_map(
+                fn (User $hunter) => $hunter->getUserIdentifier(),
+                $this->getHunters()->toArray(),
+            )
         ];
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getHunters(): Collection
+    {
+        return $this->hunters;
+    }
+
+    public function addHunter(User $hunter): Bear
+    {
+        if (!$this->hunters->contains($hunter)) {
+            $this->hunters->add($hunter);
+        }
+
+        return $this;
+    }
+
+    public function removeHunter(User $hunter): Bear
+    {
+        $this->hunters->removeElement($hunter);
+
+        return $this;
     }
 }

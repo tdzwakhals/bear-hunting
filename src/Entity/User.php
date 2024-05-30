@@ -6,6 +6,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -32,6 +34,17 @@ final class User extends GenericEntity implements UserInterface, PasswordAuthent
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $lastLogin = null;
+
+    /**
+     * @var Collection<int, Bear>
+     */
+    #[ORM\ManyToMany(targetEntity: Bear::class, mappedBy: 'hunters')]
+    private Collection $bears;
+
+    public function __construct()
+    {
+        $this->bears = new ArrayCollection();
+    }
 
     public function getEmail(): string
     {
@@ -110,6 +123,33 @@ final class User extends GenericEntity implements UserInterface, PasswordAuthent
     public function setLastLogin(?DateTimeInterface $lastLogin): User
     {
         $this->lastLogin = $lastLogin;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bear>
+     */
+    public function getBears(): Collection
+    {
+        return $this->bears;
+    }
+
+    public function addBear(Bear $bear): static
+    {
+        if (!$this->bears->contains($bear)) {
+            $this->bears->add($bear);
+            $bear->addHunter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBear(Bear $bear): static
+    {
+        if ($this->bears->removeElement($bear)) {
+            $bear->removeHunter($this);
+        }
+
         return $this;
     }
 }

@@ -19,11 +19,11 @@ final class Version20240530085406 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql("UPDATE user SET roles = '[\"ROLE_ADMIN\"]' WHERE id = 2;");
+        $this->addSql("UPDATE user SET `roles` = '[\"ROLE_ADMIN\"]' WHERE `id` = 2;");
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql("UPDATE user SET roles = '[]' WHERE id = 2;");
+        $this->addSql("UPDATE user SET `roles` = '[]' WHERE `id` = 2;");
     }
 }

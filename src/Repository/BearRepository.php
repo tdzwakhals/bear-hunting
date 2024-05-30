@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Bear;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Parameter;
@@ -27,18 +28,21 @@ final class BearRepository extends ServiceEntityRepository
         float $latitudeUp,
         float $latitudeDown,
         float $longitudeLeft,
-        float $longitudeRight
+        float $longitudeRight,
+        User $hunter,
     ): array {
         return $this->createQueryBuilder('bear')
             ->where('bear.latitude < :latitudeUp')
             ->andWhere('bear.latitude > :latitudeDown')
             ->andWhere('bear.longitude < :longitudeLeft')
             ->andWhere('bear.longitude > :longitudeRight')
+            ->andWhere(':hunter NOT MEMBER OF bear.hunters')
             ->setParameters(new ArrayCollection([
                 new Parameter('latitudeUp', $latitudeUp),
                 new Parameter('latitudeDown', $latitudeDown),
                 new Parameter('longitudeLeft', $longitudeLeft),
                 new Parameter('longitudeRight', $longitudeRight),
+                new Parameter('hunter', $hunter),
             ]))
             ->getQuery()
             ->getResult();

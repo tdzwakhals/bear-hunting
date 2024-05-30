@@ -1,0 +1,20 @@
+hunt_by_location:
+  path:
+    - '/api/hunt/location'
+  methods: POST
+  defaults:
+    _controller: App\Controller\HuntController::fetchHuntByLocationAction
+
+hunt_complete:
+  path:
+    - '/api/hunt/bear/{id}'
+  methods: PUT
+  defaults:
+    _controller: App\Controller\HuntController::registerHuntAction
+
+hunt_rankings:
+  path:
+    - '/api/hunt/rankings'
+  methods: GET
+  defaults:
+    _controller: App\Controller\HuntController::getRankingsAction
