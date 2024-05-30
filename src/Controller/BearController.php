@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Bear;
-use App\Form\Request\BearType;
+use App\Form\BearType;
 use App\Service\BearService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/admin/bear/', name: 'app_admin_bear_')]
-final class AdminBearController extends AbstractController
+#[Route('/bear/', name: 'app_bear_')]
+final class BearController extends AbstractController
 {
     public function __construct(private readonly BearService $bearService)
     {

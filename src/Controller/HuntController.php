@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\DTO\Request\LocationDTO;
 use App\Entity\Bear;
-use App\Form\Request\LocationType;
+use App\Form\LocationType;
 use App\Service\HuntService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

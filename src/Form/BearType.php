@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Request;
+namespace App\Form;
 
 use App\Entity\Bear;
 use Symfony\Component\Form\AbstractType;

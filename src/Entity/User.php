@@ -10,14 +10,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-final class User extends GenericEntity implements UserInterface, PasswordAuthenticatedUserInterface
+final class User extends GenericEntity implements UserInterface, PasswordAuthenticatedUserInterface, JsonSerializable
 {
     #[ORM\Column(length: 180, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private string $email;
 
     /**
@@ -134,7 +138,7 @@ final class User extends GenericEntity implements UserInterface, PasswordAuthent
         return $this->bears;
     }
 
-    public function addBear(Bear $bear): static
+    public function addBear(Bear $bear): User
     {
         if (!$this->bears->contains($bear)) {
             $this->bears->add($bear);
@@ -144,12 +148,21 @@ final class User extends GenericEntity implements UserInterface, PasswordAuthent
         return $this;
     }
 
-    public function removeBear(Bear $bear): static
+    public function removeBear(Bear $bear): User
     {
         if ($this->bears->removeElement($bear)) {
             $bear->removeHunter($this);
         }
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'email' => $this->email,
+            'roles' => $this->roles,
+            'bears_hunted' => $this->getBears()->count()
+        ];
     }
 }
