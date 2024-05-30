@@ -10,5 +10,8 @@ security_domain:
 hunt_domain:
     resource: 'routes/domains/hunt.yaml'
 
-admin_bears_domain:
-    resource: 'routes/domains/admin-bears.yaml'
+bear_domain:
+    resource: 'routes/domains/bear.yaml'
+
+user_domain:
+    resource: 'routes/domains/user.yaml'

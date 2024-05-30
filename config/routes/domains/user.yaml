@@ -1,0 +1,13 @@
+user_create:
+  path:
+    - '/api/user/'
+  methods: POST
+  defaults:
+    _controller: App\Controller\UserController::createAction
+
+user_fetch_all:
+  path:
+    - '/api/user/'
+  methods: GET
+  defaults:
+    _controller: App\Controller\UserController::fetchAllAction
