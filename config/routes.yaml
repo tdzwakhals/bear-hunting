@@ -7,8 +7,8 @@ controllers:
 security_domain:
     resource: 'routes/domains/security.yaml'
 
-bears_domain:
-    resource: 'routes/domains/bears.yaml'
+hunt_domain:
+    resource: 'routes/domains/hunt.yaml'
 
 admin_bears_domain:
     resource: 'routes/domains/admin-bears.yaml'

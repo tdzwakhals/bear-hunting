@@ -28,37 +28,25 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         }
 
         $user->setPassword($newHashedPassword);
-        $this->getEntityManager()->persist($user);
-        $this->getEntityManager()->flush();
+        $this->save($user);
     }
 
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?User
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
     public function save(User $user): void
     {
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+    }
+
+    public function getRankings(): array
+    {
+        $entityManager = $this->getEntityManager();
+        $stmt = $entityManager->getConnection()->prepare(
+            "SELECT user.email AS hunter, COUNT(bu.bear_id) AS bears FROM user
+                LEFT JOIN bear_user bu on user.id = bu.user_id
+                WHERE user.roles LIKE '%ROLE_HUNTER%'
+                GROUP BY user.email
+                ORDER BY bears DESC;"
+        );
+        return $stmt->executeQuery()->fetchAllAssociative();
     }
 }
