@@ -1,0 +1,10 @@
+framework:
+  rate_limiter:
+    anonymous_api:
+      policy: 'fixed_window'
+      limit: 3
+      interval: '5 minutes'
+    authenticated_api:
+      policy: 'token_bucket'
+      limit: 2000
+      rate: { interval: '15 minutes', amount: 10 }

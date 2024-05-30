@@ -15,6 +15,8 @@ security:
             stateless: true
             lazy: true
             provider: user_provider
+            login_throttling:
+                max_attempts: 3
             json_login:
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
