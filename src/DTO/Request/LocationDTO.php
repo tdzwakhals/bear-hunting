@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\DTO\Request;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 final class LocationDTO
 {
+    #[Assert\NotBlank]
     private float $latitude;
+    #[Assert\NotBlank]
     private float $longitude;
     private int $radius = 25;
 

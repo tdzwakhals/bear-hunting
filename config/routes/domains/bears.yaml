@@ -1,11 +1,4 @@
-bears_all:
-  path:
-    - '/api/bears'
-  methods: GET
-  defaults:
-    _controller: App\Controller\BearController::fetchAllAction
-
-bears_find_one:
+bears_find_by_location:
   path:
     - '/api/bears/location'
   methods: POST
