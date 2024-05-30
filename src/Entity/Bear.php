@@ -7,23 +7,29 @@ namespace App\Entity;
 use App\Repository\BearRepository;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BearRepository::class)]
 final class Bear extends GenericEntity implements JsonSerializable
 {
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(length: 255, unique: true, nullable: false)]
+    #[Assert\NotBlank]
     private string $name;
 
     #[ORM\Column(length: 255, nullable: false)]
+    #[Assert\NotBlank]
     private string $location;
 
     #[ORM\Column(length: 255, nullable: false)]
+    #[Assert\NotBlank]
     private string $province;
 
     #[ORM\Column(nullable: false)]
+    #[Assert\NotBlank]
     private float $latitude;
 
     #[ORM\Column(nullable: false)]
+    #[Assert\NotBlank]
     private float $longitude;
 
     public function getName(): string

@@ -43,4 +43,16 @@ final class BearRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function save(Bear $bear): void
+    {
+        $this->getEntityManager()->persist($bear);
+        $this->getEntityManager()->flush();
+    }
+
+    public function delete(Bear $bear): void
+    {
+        $this->getEntityManager()->remove($bear);
+        $this->getEntityManager()->flush();
+    }
 }

@@ -19,14 +19,6 @@ final class BearController extends AbstractController
     {
     }
 
-    #[Route('/', name: 'app_bears', methods: ['GET'])]
-    public function fetchAllAction(): JsonResponse
-    {
-        return new JsonResponse(
-            $this->bearService->getAllBears()
-        );
-    }
-
     #[Route('/location', name: 'app_bear_by_location', methods: ['POST'])]
     public function fetchBearByLocation(Request $request): JsonResponse
     {
