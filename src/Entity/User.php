@@ -176,7 +176,7 @@ final class User extends GenericEntity implements UserInterface, PasswordAuthent
             'email' => $this->getEmail(),
             'roles' => $this->getRoles(),
             'bears_hunted' => $this->getBearsHunted(),
-            'last_login' => $this->getLastLogin(),
+            'last_login' => $this->getLastLogin()?->format('d-m-Y H:i:s'),
             'created' => $this->getCreated()->format('d-m-Y H:i:s'),
             'updated' => $this->getUpdated()->format('d-m-Y H:i:s'),
         ];

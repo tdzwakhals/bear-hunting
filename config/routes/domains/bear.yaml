@@ -21,14 +21,14 @@ bear_fetch_one:
 
 bear_update:
   path:
-    - '/api/bear/{id}'
+    - '/api/bear/{id}/update'
   methods: PUT
   defaults:
     _controller: App\Controller\BearController::updateBearAction
 
 bear_delete:
   path:
-    - '/api/bear/{id}'
+    - '/api/bear/{id}/delete'
   methods: DELETE
   defaults:
     _controller: App\Controller\BearController::deleteBearAction

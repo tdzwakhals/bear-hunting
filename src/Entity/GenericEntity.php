@@ -17,7 +17,7 @@ abstract class GenericEntity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('fetch:admin')]
+    #[Groups(['fetch', 'fetch:admin'])]
     private int $id;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]

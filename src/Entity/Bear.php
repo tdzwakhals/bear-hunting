@@ -115,6 +115,7 @@ final class Bear extends GenericEntity implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
+            'id' => $this->getId(),
             'name' => $this->getName(),
             'location' => $this->getLocation(),
             'province' => $this->getProvince(),
