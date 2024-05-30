@@ -1,0 +1,53 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Bear hunting
+            description: No more bears!
+            version: 0.1.0
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    bearerFormat: JWT
+        security:
+            - Bearer: []
+        paths:
+            /api/login_check:
+                post:
+                    tags:
+                        - Login
+                    requestBody:
+                        content:
+                            application/json:
+                                schema:
+                                    properties:
+                                        _username:
+                                            type: string
+                                        _password:
+                                            type: string
+                                    type: object
+                    responses:
+                        200:
+                            description: OK
+                            content:
+                                application/json:
+                                    schema:
+                                        type: object
+                                        properties:
+                                            token:
+                                                type: string
+                                            refresh_token:
+                                                type: string
+                        401:
+                            description: Invalid credentials
+                        400:
+                            description: Invalid JSON.
+                    security: [ ]
+    areas: # to filter documented areas
+        default:
+            path_patterns:
+                - ^/api(?!/(doc|bear|user)) # Accepts routes under /api except /api/doc or /api/bear or /api/user
+        admin:
+            path_patterns:
+                - ^/api/(bear|user)

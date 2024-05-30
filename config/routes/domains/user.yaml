@@ -1,9 +1,9 @@
 user_create:
   path:
-    - '/api/user/'
+    - '/api/user/create'
   methods: POST
   defaults:
-    _controller: App\Controller\UserController::createAction
+    _controller: App\Controller\UserController::createUserAction
 
 user_fetch_all:
   path:

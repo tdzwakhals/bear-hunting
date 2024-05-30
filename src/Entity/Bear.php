@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
+use OpenApi\Attributes as OA;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BearRepository::class)]
@@ -16,28 +18,38 @@ final class Bear extends GenericEntity implements JsonSerializable
 {
     #[ORM\Column(length: 255, nullable: false)]
     #[Assert\NotBlank]
+    #[Groups('fetch')]
     private string $name;
 
     #[ORM\Column(length: 255, nullable: false)]
     #[Assert\NotBlank]
+    #[Groups('fetch')]
     private string $location;
 
     #[ORM\Column(length: 255, nullable: false)]
     #[Assert\NotBlank]
+    #[Groups('fetch')]
     private string $province;
 
     #[ORM\Column(nullable: false)]
     #[Assert\NotBlank]
+    #[Groups('fetch')]
     private float $latitude;
 
     #[ORM\Column(nullable: false)]
     #[Assert\NotBlank]
+    #[Groups('fetch')]
     private float $longitude;
 
     /**
      * @var Collection<int, User>
      */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'bears')]
+    #[Groups('fetch:admin')]
+    #[OA\Property(
+        type: 'array',
+        items: new OA\Items(type: 'string')
+    )]
     private Collection $hunters;
 
     public function __construct()
@@ -103,15 +115,15 @@ final class Bear extends GenericEntity implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'name' => $this->name,
-            'location' => $this->location,
-            'province' => $this->province,
-            'latitude' => $this->latitude,
-            'longitude' => $this->longitude,
+            'name' => $this->getName(),
+            'location' => $this->getLocation(),
+            'province' => $this->getProvince(),
+            'latitude' => $this->getLatitude(),
+            'longitude' => $this->getLongitude(),
             'hunters' => array_map(
                 fn (User $hunter) => $hunter->getUserIdentifier(),
                 $this->getHunters()->toArray(),
-            )
+            ),
         ];
     }
 

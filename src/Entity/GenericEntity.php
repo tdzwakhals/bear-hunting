@@ -8,6 +8,7 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -16,12 +17,15 @@ abstract class GenericEntity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('fetch:admin')]
     private int $id;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
+    #[Groups('fetch:admin')]
     private DateTimeInterface $created;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
+    #[Groups('fetch:admin')]
     private DateTimeInterface $updated;
 
     public function getId(): int

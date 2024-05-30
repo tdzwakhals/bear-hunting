@@ -62,7 +62,7 @@ final class HuntService
     /**
      * @throws BearAlreadyHuntedException
      */
-    public function completeHunt(Bear $bear): void
+    public function registerHunt(Bear $bear): void
     {
         /** @var User $hunter */
         $hunter = $this->security->getUser();
