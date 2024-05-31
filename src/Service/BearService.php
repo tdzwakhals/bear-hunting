@@ -21,7 +21,7 @@ final readonly class BearService
     /**
      * @return Bear[]
      */
-    public function getAllBears(): array
+    public function getAll(): array
     {
         return $this->bearRepository->findAll();
     }

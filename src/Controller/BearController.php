@@ -7,20 +7,22 @@ namespace App\Controller;
 use App\Entity\Bear;
 use App\Form\BearType;
 use App\Service\BearService;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Attributes as OA;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/bear/', name: 'app_bear_')]
-final class BearController extends AbstractController
+final class BearController extends AbstractFOSRestController
 {
-    public function __construct(private readonly BearService $bearService)
-    {
+    public function __construct(
+        private readonly BearService $bearService,
+        private readonly SerializerInterface $serializer,
+    ) {
     }
 
     #[Route('/', name: 'all', methods: ['GET'])]
@@ -46,10 +48,15 @@ final class BearController extends AbstractController
     )]
     #[OA\Tag('Bears')]
     #[Security(name: 'Bearer')]
-    public function fetchAllAction(): JsonResponse
+    public function fetchAllAction(): Response
     {
-        return new JsonResponse(
-            $this->bearService->getAllBears()
+        $data = $this->serializer->normalize(
+            $this->bearService->getAll(),
+            context: ['groups' => ['fetch', 'fetch:admin']]
+        );
+
+        return $this->handleView(
+            $this->view($data)
         );
     }
 
@@ -73,7 +80,7 @@ final class BearController extends AbstractController
     )]
     #[OA\Tag('Bears')]
     #[Security(name: 'Bearer')]
-    public function createBearAction(Request $request): JsonResponse
+    public function createBearAction(Request $request): Response
     {
         $bear = new Bear();
         $form = $this->createForm(BearType::class, $bear);
@@ -82,7 +89,9 @@ final class BearController extends AbstractController
 
         $this->bearService->save($bear);
 
-        return new JsonResponse("Bear {$bear->getName()} created successfully", Response::HTTP_CREATED);
+        return $this->handleView(
+            $this->view("Bear {$bear->getName()} created successfully", Response::HTTP_CREATED)
+        );
     }
 
     #[Route('/{id}', name: 'fetch', requirements: ['id' => '\d+'], methods: ['GET'])]
@@ -105,15 +114,19 @@ final class BearController extends AbstractController
     )]
     #[OA\Tag('Bears')]
     #[Security(name: 'Bearer')]
-    public function fetchBearAction(Bear $bear): JsonResponse
+    public function fetchBearAction(Bear $bear): Response
     {
-        return new JsonResponse($bear);
+        $data = $this->serializer->normalize($bear, context: ['groups' => ['fetch', 'fetch:admin']]);
+
+        return $this->handleView(
+            $this->view($data)
+        );
     }
 
     #[Route('/{id}/update', name: 'update', requirements: ['id' => '\d+'], methods: ['PUT'])]
     #[OA\Put(requestBody: new OA\RequestBody(content: new OA\JsonContent(ref: new Model(type: BearType::class))))]
     #[OA\Response(
-        response: 201,
+        response: 200,
         description: 'Returns confirmation message if bear is updated'
     )]
     #[OA\Response(
@@ -130,7 +143,7 @@ final class BearController extends AbstractController
     )]
     #[OA\Tag('Bears')]
     #[Security(name: 'Bearer')]
-    public function updateBearAction(Request $request, Bear $bear): JsonResponse
+    public function updateBearAction(Request $request, Bear $bear): Response
     {
         $form = $this->createForm(BearType::class, $bear);
         $form->handleRequest($request);
@@ -138,7 +151,9 @@ final class BearController extends AbstractController
 
         $this->bearService->save($bear);
 
-        return new JsonResponse("Bear {$bear->getName()} updated successfully", Response::HTTP_CREATED);
+        return $this->handleView(
+            $this->view("Bear {$bear->getName()} updated successfully")
+        );
     }
 
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
@@ -160,9 +175,12 @@ final class BearController extends AbstractController
     )]
     #[OA\Tag('Bears')]
     #[Security(name: 'Bearer')]
-    public function deleteBearAction(Bear $bear): JsonResponse
+    public function deleteBearAction(Bear $bear): Response
     {
         $this->bearService->delete($bear);
-        return new JsonResponse("Bear {$bear->getName()} deleted successfully", Response::HTTP_OK);
+
+        return $this->handleView(
+            $this->view("Bear {$bear->getName()} deleted successfully")
+        );
     }
 }

@@ -9,19 +9,22 @@ use App\DTO\Request\LocationDTO;
 use App\Entity\Bear;
 use App\Form\LocationType;
 use App\Service\HuntService;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use OpenApi\Attributes as OA;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/hunt', name: 'app_hunt_')]
-final class HuntController extends AbstractController
+final class HuntController extends AbstractFOSRestController
 {
-    public function __construct(private readonly HuntService $huntService)
-    {
+    public function __construct(
+        private readonly HuntService $huntService,
+        private readonly SerializerInterface $serializer,
+    ) {
     }
 
     #[Route('/location', name: 'by_location', methods: ['POST'])]
@@ -48,15 +51,20 @@ final class HuntController extends AbstractController
     )]
     #[OA\Tag('Hunt')]
     #[Security(name: 'Bearer')]
-    public function fetchHuntByLocationAction(Request $request): JsonResponse
+    public function fetchHuntByLocationAction(Request $request): Response
     {
         $locationDTO = new LocationDTO();
         $form = $this->createForm(LocationType::class, $locationDTO);
         $form->handleRequest($request);
         $form->submit(json_decode($request->getContent(), true));
 
-        return new JsonResponse(
-            $this->huntService->findBears($locationDTO)
+        $data = $this->serializer->normalize(
+            $this->huntService->findBears($locationDTO),
+            context: ['groups' => ['fetch']]
+        );
+
+        return $this->handleView(
+            $this->view($data)
         );
     }
 
@@ -79,10 +87,13 @@ final class HuntController extends AbstractController
     )]
     #[OA\Tag('Hunt')]
     #[Security(name: 'Bearer')]
-    public function registerHuntAction(Bear $bear): JsonResponse
+    public function registerHuntAction(Bear $bear): Response
     {
         $this->huntService->registerHunt($bear);
-        return new JsonResponse("Hunt of {$bear->getName()} registered!");
+
+        return $this->handleView(
+            $this->view("Hunt of {$bear->getName()} registered!")
+        );
     }
 
     #[Route('/rankings', name: 'rankings', methods: ['GET'])]
@@ -108,10 +119,12 @@ final class HuntController extends AbstractController
     )]
     #[OA\Tag('Hunt')]
     #[Security(name: 'Bearer')]
-    public function getRankingsAction(): JsonResponse
+    public function getRankingsAction(): Response
     {
-        return new JsonResponse(
-            $this->huntService->getRankings()
+        $data = $this->serializer->normalize($this->huntService->getRankings());
+
+        return $this->handleView(
+            $this->view($data)
         );
     }
 }

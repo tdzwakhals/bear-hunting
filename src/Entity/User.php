@@ -10,16 +10,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Context;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-final class User extends GenericEntity implements UserInterface, PasswordAuthenticatedUserInterface, JsonSerializable
+final class User extends GenericEntity implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Column(length: 180, nullable: false)]
     #[Assert\NotBlank]
@@ -42,6 +44,7 @@ final class User extends GenericEntity implements UserInterface, PasswordAuthent
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups('fetch:admin')]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'd-m-Y H:i:s'])]
     private ?DateTimeInterface $lastLogin = null;
 
     /**
@@ -163,22 +166,16 @@ final class User extends GenericEntity implements UserInterface, PasswordAuthent
     }
 
     #[Groups('fetch:admin')]
-    #[OA\Property(type: 'integer')]
-    public function getBearsHunted(): int
+    #[OA\Property(
+        type: 'array',
+        items: new OA\Items(type: 'string')
+    )]
+    #[SerializedName('bears')]
+    public function getBearNames(): array
     {
-        return $this->getBears()->count();
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'email' => $this->getEmail(),
-            'roles' => $this->getRoles(),
-            'bears_hunted' => $this->getBearsHunted(),
-            'last_login' => $this->getLastLogin()?->format('d-m-Y H:i:s'),
-            'created' => $this->getCreated()->format('d-m-Y H:i:s'),
-            'updated' => $this->getUpdated()->format('d-m-Y H:i:s'),
-        ];
+        return array_map(
+            fn (Bear $bear) => $bear->getName(),
+            $this->getBears()->toArray(),
+        );
     }
 }

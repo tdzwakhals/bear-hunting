@@ -23,7 +23,7 @@ final readonly class UserProvider implements UserProviderInterface
 
     public function supportsClass(string $class): bool
     {
-        return $class = User::class;
+        return $class === User::class;
     }
 
     public function loadUserByIdentifier(string $identifier): UserInterface

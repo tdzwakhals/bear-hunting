@@ -13,6 +13,7 @@
         "doctrine/doctrine-bundle": "^2.12",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.1",
+        "friendsofsymfony/rest-bundle": "^3.7",
         "lexik/jwt-authentication-bundle": "^3.0",
         "nelmio/api-doc-bundle": "^4.26",
         "symfony/asset": "7.0.*",
