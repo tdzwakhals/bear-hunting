@@ -8,13 +8,13 @@ use App\Repository\BearRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BearRepository::class)]
-final class Bear extends GenericEntity implements JsonSerializable
+final class Bear extends GenericEntity
 {
     #[ORM\Column(length: 255, nullable: false)]
     #[Assert\NotBlank]
@@ -45,11 +45,6 @@ final class Bear extends GenericEntity implements JsonSerializable
      * @var Collection<int, User>
      */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'bears')]
-    #[Groups('fetch:admin')]
-    #[OA\Property(
-        type: 'array',
-        items: new OA\Items(type: 'string')
-    )]
     private Collection $hunters;
 
     public function __construct()
@@ -112,22 +107,6 @@ final class Bear extends GenericEntity implements JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'location' => $this->getLocation(),
-            'province' => $this->getProvince(),
-            'latitude' => $this->getLatitude(),
-            'longitude' => $this->getLongitude(),
-            'hunters' => array_map(
-                fn (User $hunter) => $hunter->getUserIdentifier(),
-                $this->getHunters()->toArray(),
-            ),
-        ];
-    }
-
     /**
      * @return Collection<int, User>
      */
@@ -150,5 +129,19 @@ final class Bear extends GenericEntity implements JsonSerializable
         $this->hunters->removeElement($hunter);
 
         return $this;
+    }
+
+    #[Groups('fetch:admin')]
+    #[OA\Property(
+        type: 'array',
+        items: new OA\Items(type: 'string')
+    )]
+    #[SerializedName('hunters')]
+    public function getHunterNames(): array
+    {
+        return array_map(
+            fn (User $hunter) => $hunter->getUserIdentifier(),
+            $this->getHunters()->toArray(),
+        );
     }
 }

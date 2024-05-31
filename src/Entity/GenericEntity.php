@@ -8,7 +8,9 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Context;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -22,10 +24,12 @@ abstract class GenericEntity
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     #[Groups('fetch:admin')]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'd-m-Y H:i:s'])]
     private DateTimeInterface $created;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     #[Groups('fetch:admin')]
+    #[Context([DateTimeNormalizer::FORMAT_KEY => 'd-m-Y H:i:s'])]
     private DateTimeInterface $updated;
 
     public function getId(): int
